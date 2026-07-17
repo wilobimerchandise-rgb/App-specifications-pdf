@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wil-Obi Tech Solutions - Invoice App Packages</title>
+    <!-- Include Google Fonts for a clean look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Include html2pdf library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #2563eb;
+            --accent-light: #dbeafe;
+            --success: #10b981;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --bg-light: #f8fafc;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9;
+            color: var(--text-dark);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Action bar for downloading */
+        .action-bar {
+            width: 100%;
+            max-width: 850px;
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .btn-download {
+            background-color: var(--accent);
+            color: #ffffff;
+            border: none;
+            padding: 12px 24px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-download:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        /* Document Container */
+        .document-container {
+            background: #ffffff;
+            width: 100%;
+            max-width: 850px;
+            padding: 50px;
+            box-sizing: border-box;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Header section */
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 30px;
+            margin-bottom: 35px;
+        }
+
+        .brand-sub {
+            color: var(--accent);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+            margin: 0 0 5px 0;
+        }
+
+        .brand-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 0 0 10px 0;
+        }
+
+        .tagline {
+            font-size: 16px;
+            color: var(--text-muted);
+            margin: 0;
+            font-style: italic;
+        }
+
+        /* Packages grid/stack */
+        .packages-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .package-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 25px;
+            background: var(--bg-light);
+            position: relative;
+        }
+
+        .package-card.popular {
+            border: 2px solid var(--accent);
+            background: #ffffff;
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -12px;
+            right: 25px;
+            background-color: var(--accent);
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .package-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .package-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 0;
+        }
+
+        .package-price {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--accent);
+            margin: 0;
+        }
+
+        .package-best-for {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .features-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 15px 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 10px;
+        }
+
+        .features-list li {
+            font-size: 14px;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .features-list li::before {
+            content: "✓";
+            color: var(--success);
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        /* Extras section */
+        .extras-section {
+            margin-top: 35px;
+            border-top: 2px dashed #e2e8f0;
+            padding-top: 30px;
+        }
+
+        .extras-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .extras-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .extra-item {
+            background: var(--bg-light);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .extra-label {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .extra-price {
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        /* Footer Info */
+        .footer-note {
+            margin-top: 30px;
+            background-color: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 15px;
+            border-radius: 4px;
+            font-size: 13.5px;
+            color: #78350f;
+            font-weight: 500;
+        }
+
+        .contact-footer {
+            margin-top: 35px;
+            text-align: center;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 25px;
+        }
+
+        .contact-btn {
+            display: inline-block;
+            background-color: #25d366;
+            color: white;
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 16px;
+            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+        }
+
+        /* PDF Generation Specific Tweaks */
+        @media print {
+            body {
+                background: none;
+                padding: 0;
+            }
+            .action-bar {
+                display: none;
+            }
+            .document-container {
+                box-shadow: none;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Download Trigger Action Bar -->
+    <div class="action-bar">
+        <button class="btn-download" onclick="generatePDF()">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 4px;">
+                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+            </svg>
+            Download Proposal PDF
+        </button>
+    </div>
+
+    <!-- The actual Proposal Document -->
+    <div class="document-container" id="proposal-document">
+        
+        <!-- Document Header -->
+        <div class="header">
+            <p class="brand-sub">WIL-OBI TECH SOLUTIONS</p>
+            <h1 class="brand-title">Professional Invoice & Receipt App</h1>
+            <p class="tagline">Stop using handwritten invoices. Get a branded, professional app for your business.</p>
+        </div>
+
+        <div class="packages-container">
+            
+            <!-- PACKAGE 1: BASIC -->
+            <div class="package-card">
+                <div class="package-header">
+                    <div>
+                        <h3 class="package-name">Package 1: Basic</h3>
+                        <div class="package-best-for">Best for: Tailors, Small Shops, Vendors</div>
+                    </div>
+                    <span class="package-price">₦80,000</span>
+                </div>
+                <ul class="features-list">
+                    <li>Company Logo + Branding</li>
+                    <li>Customer Details: Name, Phone, Address</li>
+                    <li>Add Items with Qty + Rate + Auto Total</li>
+                    <li>₦ Naira Symbol + 7.5% VAT Option</li>
+                    <li>Generate PDF + Print Invoice</li>
+                    <li>Mobile + Computer Friendly</li>
+                    <li>1 Day Delivery</li>
+                </ul>
+            </div>
+
+            <!-- PACKAGE 2: PRO (MOST POPULAR) -->
+            <div class="package-card popular">
+                <div class="popular-badge">Most Popular</div>
+                <div class="package-header">
+                    <div>
+                        <h3 class="package-name">Package 2: Pro</h3>
+                        <div class="package-best-for">Best for: Superstores, Pharmacies, Schools, Hotels</div>
+                    </div>
+                    <span class="package-price">₦200,000</span>
+                </div>
+                <p style="font-weight: 600; font-size: 13px; color: var(--accent); margin: -5px 0 12px 0;">Everything in Basic PLUS:</p>
+                <ul class="features-list">
+                    <li>Save & Load Old Invoices</li>
+                    <li>Customer Database</li>
+                    <li>Product/Item Database</li>
+                    <li>Multiple Document Types (Invoice, Receipt, Quotation)</li>
+                    <li>Company Phone, Email, Address on Invoice</li>
+                    <li>Signature + Stamp Section</li>
+                    <li>Share PDF Directly to WhatsApp</li>
+                    <li>Works Offline</li>
+                    <li>5 Days Delivery + 3 Months Support</li>
+                </ul>
+            </div>
+
+            <!-- PACKAGE 3: PREMIUM -->
+            <div class="package-card">
+                <div class="package-header">
+                    <div>
+                        <h3 class="package-name">Package 3: Premium</h3>
+                        <div class="package-best-for">Best for: Chains, Big Companies</div>
+                    </div>
+                    <span class="package-price">₦500,000</span>
+                </div>
+                <p style="font-weight: 600; font-size: 13px; color: var(--accent); margin: -5px 0 12px 0;">Everything in Pro PLUS:</p>
+                <ul class="features-list">
+                    <li>Convert to Android APK App</li>
+                    <li>Sales Reports & Daily Summary</li>
+                    <li>Inventory & Stock Tracking</li>
+                    <li>Barcode Scanner</li>
+                    <li>Multi-User Login for Staff</li>
+                    <li>Cloud Backup</li>
+                    <li>2 Weeks Delivery + 6 Months Support</li>
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- Add-ons section -->
+        <div class="extras-section">
+            <h3 class="extras-title">Available Add-ons</h3>
+            <div class="extras-grid">
+                <div class="extra-item">
+                    <span class="extra-label">Google Play Store Upload</span>
+                    <span class="extra-price">+₦50,000</span>
+                </div>
+                <div class="extra-item">
+                    <span class="extra-label">Yearly Maintenance Support</span>
+                    <span class="extra-price">₦30,000 / yr</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Guarantee Note -->
+        <div class="footer-note">
+            💡 <strong>One-time payment.</strong> You own the app lifetime and forever. Absolutely no monthly or subscription fees.
+        </div>
+
+        <!-- Contact details -->
+        <div class="contact-footer">
+            <p style="margin-bottom: 15px; font-weight: 600; font-size: 15px;">Ready to elevate your business operations?</p>
+            <a href="https://wa.me/2347036536587" class="contact-btn" target="_blank">
+                💬 Call / WhatsApp: 07036536587
+            </a>
+        </div>
+
+    </div>
+
+    <!-- PDF Generation Logic -->
+    <script>
+        function generatePDF() {
+            const element = document.getElementById('proposal-document');
+            const opt = {
+                margin:       0.3,
+                filename:     'WilObi_Tech_Solutions_Invoice_Proposal.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+
+            // Run html2pdf
+            html2pdf().set(opt).from(element).save();
+        }
+    </script>
+</body>
+</html>
