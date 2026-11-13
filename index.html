@@ -284,13 +284,13 @@ el('div',{class:'acts'},el('button',{class:'btn go',type:'button',onclick:()=>ex
 fillItems()}
 function renderPaper(){
 const T=totals(),s=S.seller,ty=D.type,rows=D.items.filter(i=>i.desc.trim()||i.rate);
-const stat=ty==='quotation'?'Valid until '+fd(D.due):ty==='receipt'?(T.bal===0?'Paid in full':'Part payment'):(T.bal===0&&T.total>0?'Paid':T.paid>0?'Part paid':'Awaiting payment');
+const stat=ty==='quotation'?(D.due?'Valid until '+fd(D.due):'No expiry date'):ty==='receipt'?(T.bal===0?'Paid in full':'Part payment'):(T.bal===0&&T.total>0?'Paid':T.paid>0?'Part paid':'Awaiting payment');
 const mi=(l,v)=>el('div',{class:'mi'},el('small',{},l),el('b',{},v));
 const sr=(l,v,c='')=>el('div',{class:'sr '+c},el('span',{},l),el('b',{},v));
 const c=D.client;
 const cx=el('div',{class:'cx'},
 el('div',{class:'pb'},el('div',{class:'bd'},el('span',{class:s.logo?'lg im':'lg'},s.logo?el('img',{src:s.logo,alt:''}):(s.name||'W')[0].toUpperCase()),s.name),el('div',{class:'bt'},el('div',{class:'pt'},TITLES[ty]),el('span',{class:'chip'},stat))),
-el('div',{class:'pm'},mi('Number',D.no),mi(ty==='receipt'?'Payment date':'Date issued',fd(D.date)),ty==='receipt'?null:mi(ty==='quotation'?'Valid until':'Due date',fd(D.due))),
+el('div',{class:'pm'},mi('Number',D.no),mi(ty==='receipt'?'Payment date':'Date issued',fd(D.date)),ty==='receipt'||!D.due?null:mi(ty==='quotation'?'Valid until':'Due date',fd(D.due))),
 el('div',{class:'pp'},
 el('div',{class:'pc'},el('small',{},'From'),[s.name,s.phone,s.email,s.address].filter(Boolean).map((l,i)=>el(i?'span':'b',{},l))),
 el('div',{class:'pc'},el('small',{},ty==='quotation'?'Prepared for':ty==='receipt'?'Received from':'Billed to'),[c.name||'Client name',c.phone,c.address].filter(Boolean).map((l,i)=>el(i?'span':'b',{},l)))),
@@ -308,7 +308,7 @@ el('div',{class:'pe'},'Thank you for choosing '+s.name));$('#paper').replaceChil
 async function exportPDF(n,name,bg,mg=[0,0,0,0]){
 if(typeof html2pdf==='undefined'){toast('PDF tool did not load. Check your connection or use Print.');return}
 const sy=window.scrollY;window.scrollTo(0,0);n.classList.add('pdf');if(n.id==='paper')placeWm();await new Promise(r=>requestAnimationFrame(()=>r()));
-try{await html2pdf().set({margin:mg,filename:name,image:{type:'jpeg',quality:.98},html2canvas:{scale:2,useCORS:true,backgroundColor:bg,windowWidth:900,scrollX:0,scrollY:0},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},pagebreak:{mode:['css','legacy'],avoid:['.pkg','.ps','.pr','.ao','.rw','.wd','.pay','.pc']}}).from(n).save();toast('PDF downloaded')}
+try{await html2pdf().set({margin:mg,filename:name,image:{type:'jpeg',quality:.98},html2canvas:{scale:2,useCORS:true,backgroundColor:bg,scrollX:0,scrollY:0},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},pagebreak:{mode:['css','legacy'],avoid:['.pkg','.ps','.pr','.ao','.rw','.wd','.pay','.pc']}}).from(n).save();toast('PDF downloaded')}
 catch(e){toast('PDF failed. Use Print and choose Save as PDF.')}
 finally{n.classList.remove('pdf');if(n.id==='paper')placeWm();window.scrollTo(0,sy)}}
 
