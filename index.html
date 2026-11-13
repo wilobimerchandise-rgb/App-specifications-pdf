@@ -1,419 +1,334 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wil-Obi Tech Solutions - Invoice App Packages</title>
-    <!-- Include Google Fonts for a clean look -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <!-- Include html2pdf library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <style>
-        :root {
-            --primary: #0f172a;
-            --accent: #2563eb;
-            --accent-light: #dbeafe;
-            --success: #10b981;
-            --text-dark: #1e293b;
-            --text-muted: #64748b;
-            --bg-light: #f8fafc;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f1f5f9;
-            color: var(--text-dark);
-            margin: 0;
-            padding: 40px 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* Action bar for downloading */
-        .action-bar {
-            width: 100%;
-            max-width: 850px;
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 20px;
-        }
-
-        .btn-download {
-            background-color: var(--accent);
-            color: #ffffff;
-            border: none;
-            padding: 12px 24px;
-            font-size: 15px;
-            font-weight: 600;
-            border-radius: 8px;
-            cursor: pointer;
-            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-download:hover {
-            background-color: #1d4ed8;
-            transform: translateY(-1px);
-        }
-
-        /* Document Container */
-        .document-container {
-            background: #ffffff;
-            width: 100%;
-            max-width: 850px;
-            padding: 50px;
-            box-sizing: border-box;
-            border-radius: 12px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-        }
-
-        /* Header section */
-        .header {
-            text-align: center;
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 30px;
-            margin-bottom: 35px;
-        }
-
-        .brand-sub {
-            color: var(--accent);
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: 700;
-            margin: 0 0 5px 0;
-        }
-
-        .brand-title {
-            font-size: 32px;
-            font-weight: 800;
-            color: var(--primary);
-            margin: 0 0 10px 0;
-        }
-
-        .tagline {
-            font-size: 16px;
-            color: var(--text-muted);
-            margin: 0;
-            font-style: italic;
-        }
-
-        /* Packages grid/stack */
-        .packages-container {
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-        }
-
-        .package-card {
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            padding: 25px;
-            background: var(--bg-light);
-            position: relative;
-        }
-
-        .package-card.popular {
-            border: 2px solid var(--accent);
-            background: #ffffff;
-        }
-
-        .popular-badge {
-            position: absolute;
-            top: -12px;
-            right: 25px;
-            background-color: var(--accent);
-            color: #ffffff;
-            font-size: 11px;
-            font-weight: 700;
-            padding: 4px 12px;
-            border-radius: 20px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .package-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #e2e8f0;
-            padding-bottom: 15px;
-            margin-bottom: 15px;
-        }
-
-        .package-name {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--primary);
-            margin: 0;
-        }
-
-        .package-price {
-            font-size: 22px;
-            font-weight: 800;
-            color: var(--accent);
-            margin: 0;
-        }
-
-        .package-best-for {
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-top: 4px;
-        }
-
-        .features-list {
-            list-style: none;
-            padding: 0;
-            margin: 0 0 15px 0;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-            gap: 10px;
-        }
-
-        .features-list li {
-            font-size: 14px;
-            color: var(--text-dark);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .features-list li::before {
-            content: "✓";
-            color: var(--success);
-            font-weight: bold;
-            font-size: 15px;
-        }
-
-        /* Extras section */
-        .extras-section {
-            margin-top: 35px;
-            border-top: 2px dashed #e2e8f0;
-            padding-top: 30px;
-        }
-
-        .extras-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 15px;
-        }
-
-        .extras-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .extra-item {
-            background: var(--bg-light);
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #e2e8f0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .extra-label {
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .extra-price {
-            color: var(--accent);
-            font-weight: 700;
-            font-size: 14px;
-        }
-
-        /* Footer Info */
-        .footer-note {
-            margin-top: 30px;
-            background-color: #fef3c7;
-            border-left: 4px solid #f59e0b;
-            padding: 15px;
-            border-radius: 4px;
-            font-size: 13.5px;
-            color: #78350f;
-            font-weight: 500;
-        }
-
-        .contact-footer {
-            margin-top: 35px;
-            text-align: center;
-            border-top: 1px solid #e2e8f0;
-            padding-top: 25px;
-        }
-
-        .contact-btn {
-            display: inline-block;
-            background-color: #25d366;
-            color: white;
-            text-decoration: none;
-            padding: 12px 30px;
-            border-radius: 30px;
-            font-weight: 700;
-            font-size: 16px;
-            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
-        }
-
-        /* PDF Generation Specific Tweaks */
-        @media print {
-            body {
-                background: none;
-                padding: 0;
-            }
-            .action-bar {
-                display: none;
-            }
-            .document-container {
-                box-shadow: none;
-                padding: 20px;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wil-Obi Merchandise Nig Ltd – Invoice app packages</title>
+<meta name="description" content="Invoice, receipt and quotation app packages for Nigerian businesses. One-time build, editable prices.">
+<meta property="og:title" content="Invoice app packages – Wil-Obi Merchandise Nig Ltd">
+<meta property="og:description" content="Branded invoice, receipt and quotation apps. Pick a package and get a quote.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#070b1a;--sf:rgba(255,255,255,.06);--ln:rgba(255,255,255,.15);--ink:#eaf0ff;--mute:#a3afcc;--a:#38e1ff;--b:#8b7bff;--ok:#2ee6a6;--on:#04101c;--fd:Sora,system-ui,sans-serif;--fb:'IBM Plex Sans',system-ui,sans-serif;color-scheme:dark}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#eef2fb;--sf:rgba(255,255,255,.75);--ln:rgba(15,23,42,.14);--ink:#0b1220;--mute:#4a5878;--a:#0b6fc2;--b:#5b45e8;--ok:#0a8a5f;--on:#fff;color-scheme:light}}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 var(--fb)}
+[hidden]{display:none!important}
+:focus-visible{outline:2px solid var(--a);outline-offset:2px}
+.bg{position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(60% 50% at 12% 8%,color-mix(in srgb,var(--a) 30%,transparent),transparent),radial-gradient(50% 45% at 88% 18%,color-mix(in srgb,var(--b) 36%,transparent),transparent);animation:drift 18s ease-in-out infinite alternate}
+.bg::after{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--ln) 1px,transparent 1px),linear-gradient(90deg,var(--ln) 1px,transparent 1px);background-size:48px 48px;opacity:.5;-webkit-mask-image:radial-gradient(70% 55% at 50% 0%,#000,transparent);mask-image:radial-gradient(70% 55% at 50% 0%,#000,transparent)}
+@keyframes drift{to{transform:translate3d(0,-3%,0) scale(1.08)}}
+@media(prefers-reduced-motion:reduce){.bg{animation:none}}
+.wrap{max-width:1100px;margin:0 auto;padding:18px 18px 60px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding-bottom:18px}
+.brand{display:flex;align-items:center;gap:12px}.brand small{display:block;color:var(--mute);font-size:12px}
+.lg{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--a),var(--b));display:grid;place-items:center;font:800 18px var(--fd);color:var(--on)}
+.tabs{display:flex;gap:4px;padding:4px;border:1px solid var(--ln);border-radius:99px;background:var(--sf)}
+.tabs button{border:0;background:none;color:var(--mute);font:600 14px var(--fb);padding:8px 18px;border-radius:99px;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:linear-gradient(120deg,var(--a),var(--b));color:var(--on)}
+.btn{font:600 14px var(--fb);padding:11px 18px;border-radius:12px;border:1px solid var(--ln);background:var(--sf);color:var(--ink);cursor:pointer;text-decoration:none;display:inline-block;text-align:center}
+.btn:hover{border-color:var(--a)}
+.btn.go{background:linear-gradient(120deg,var(--a),var(--b));color:var(--on);border-color:transparent}
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:16px}
+.hint{flex:1 1 260px;color:var(--mute);font-size:13px}
+#sheet{padding:28px 24px;border-radius:22px}
+#sheet.pdf{width:794px;background:var(--bg);border-radius:0}
+.pdf .no-pdf{display:none!important}
+.who{margin:0;color:var(--a);font-weight:600}
+.hero h1{font:800 clamp(30px,5.4vw,52px)/1.06 var(--fd);letter-spacing:-.02em;margin:8px 0 12px;max-width:18ch}
+.tag{margin:0;color:var(--mute);max-width:52ch;font-size:17px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:20px;margin-top:34px}
+.pkg{position:relative;display:flex;flex-direction:column;gap:6px;padding:24px;border-radius:20px;border:1px solid var(--ln);background:var(--sf);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.pkg.pop{border:1.5px solid transparent;background:linear-gradient(var(--bg),var(--bg)) padding-box,conic-gradient(from 140deg,var(--a),var(--b),var(--ok),var(--a)) border-box}
+.pdf .pkg.pop{background:var(--sf);border-color:var(--a)}
+.badge{position:absolute;top:-12px;right:18px;background:linear-gradient(120deg,var(--a),var(--b));color:var(--on);font:600 12px var(--fb);padding:3px 12px;border-radius:99px}
+.pkg h3{margin:0;font:700 20px var(--fd)}
+.pr0{display:inline-flex;align-items:baseline;gap:2px;font-weight:700;color:var(--a)}
+.big{font:800 32px var(--fd);margin:4px 0}
+.best,.inh{margin:0;color:var(--mute);font-size:13.5px}.inh{margin-top:10px;color:var(--ink);font-weight:600}
+.ft{list-style:none;margin:6px 0 16px;padding:0;display:grid;gap:8px;flex:1}
+.ft li{display:flex;gap:8px;font-size:14px}.ft li::before{content:"✓";color:var(--ok);font-weight:700}
+.sub{font:700 20px var(--fd);margin:34px 0 14px}
+.add{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:14px}
+.ao{display:flex;justify-content:space-between;gap:12px;align-items:baseline;padding:14px 16px;border:1px solid var(--ln);border-radius:14px;background:var(--sf)}
+.note{margin:24px 0;padding:16px 18px;border-left:3px solid var(--ok);background:var(--sf);border-radius:0 14px 14px 0}
+[contenteditable]{border-radius:6px;outline:none;transition:background .15s}
+[contenteditable]:hover{background:rgba(127,127,127,.16)}
+[contenteditable]:focus{background:rgba(127,127,127,.2);box-shadow:0 0 0 2px var(--a)}
+.pdf [contenteditable]{background:none!important;box-shadow:none!important}
+.docs{display:grid;grid-template-columns:minmax(300px,380px) minmax(0,1fr);gap:24px;align-items:start}
+@media(max-width:900px){.docs{grid-template-columns:1fr}}
+.pane-form{padding:18px;border:1px solid var(--ln);border-radius:20px;background:var(--sf);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.pane-form h2{margin:0 0 10px;font:700 20px var(--fd)}.pane-form h3{margin:18px 0 0;font:700 15px var(--fd)}
+.pane-form label{display:block;margin-top:10px;font-size:13px;color:var(--mute)}
+.pane-form input,.pane-form select,.pane-form textarea{width:100%;margin-top:4px;padding:9px 11px;border-radius:10px;border:1px solid var(--ln);background:rgba(127,127,127,.12);color:var(--ink);font:inherit}
+.pane-form option{color:#0b1220}
+.pane-form .ck{display:flex;align-items:center;gap:8px;color:var(--ink)}.pane-form .ck input{width:auto;margin:0}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:4px;border:1px solid var(--ln);border-radius:12px}
+.seg button{border:0;border-radius:9px;padding:8px 4px;background:none;color:var(--mute);font:600 13px var(--fb);cursor:pointer}
+.seg button[aria-pressed="true"]{background:linear-gradient(120deg,var(--a),var(--b));color:var(--on)}
+.ir{display:grid;grid-template-columns:1fr 1fr auto;gap:6px;margin-top:8px}.ir .d{grid-column:1/-1}
+.ir .x{border:1px solid var(--ln);background:none;color:var(--mute);border-radius:10px;cursor:pointer;padding:0 12px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chips button{border:1px dashed var(--ln);background:none;color:var(--ink);border-radius:99px;padding:6px 12px;font:500 12.5px var(--fb);cursor:pointer}
+details{margin-top:14px}summary{cursor:pointer;font-weight:600}
+.acts{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}.acts .btn{flex:1}
+.pane-prev{min-width:0}
+.paper{background:#fff;color:#0f172a;font:13px/1.5 var(--fb);border-radius:16px;overflow:hidden;box-shadow:0 30px 80px -30px rgba(0,0,0,.7);container-type:inline-size;margin:0 auto;max-width:794px;width:100%}
+.paper.pdf{width:794px;max-width:none;border-radius:0;box-shadow:none}
+.paper small{display:block;color:#64708c;font-size:12px}
+.pb{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:30px 36px;color:#fff;background:linear-gradient(120deg,#0b1430,#2a1d7a 62%,#0e7da6)}
+.bd{display:flex;align-items:center;gap:10px;font:700 16px var(--fd)}.bd .lg{width:38px;height:38px}
+.bt{text-align:right}.pt{font:800 30px/1 var(--fd)}
+.chip{display:inline-block;margin-top:10px;padding:3px 12px;border-radius:99px;font-weight:600;font-size:11.5px;background:rgba(255,255,255,.18)}
+.pm{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:22px 36px 0}
+.mi b,.pc b{display:block}
+.pp{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:18px 36px 0}
+.pc{display:grid;gap:1px;padding:14px 16px;border-radius:12px;background:#f3f6fc;border:1px solid #e3e8f4;align-content:start}
+.pi{padding:20px 36px 0}
+.pr{display:grid;grid-template-columns:1fr 48px 100px 116px;gap:8px;padding:10px 0;border-bottom:1px solid #e5e9f2}
+.pr.h{font-weight:600;color:#5a6785;font-size:12px;border-bottom:2px solid #0b1430}
+.n{text-align:right;font-variant-numeric:tabular-nums}
+.ps{width:min(100%,310px);margin:14px 36px 0 auto;display:grid;gap:6px}
+.sr{display:flex;justify-content:space-between;gap:12px}
+.sr.tot{padding:12px 14px;border-radius:12px;background:linear-gradient(120deg,#0b1430,#2a1d7a);color:#fff;font:700 16px var(--fd)}
+.sr.bal{font-size:15px;color:#b4232a}
+.pf{display:grid;grid-template-columns:1.3fr 1fr;gap:24px;padding:24px 36px 8px}
+.pf p{margin:2px 0 10px;white-space:pre-wrap}
+.sg{display:grid;gap:30px;align-content:end}
+.sg span{border-top:1px solid #94a0bb;padding-top:4px;color:#64708c;font-size:12px}
+.pe{padding:14px 36px 26px;color:#64708c;font-size:12px;text-align:center}
+@container (max-width:560px){.pb,.pm,.pp,.pi,.pf,.pe{padding-left:18px;padding-right:18px}.ps{margin-right:18px}.pt{font-size:22px}.pr{grid-template-columns:1fr 34px 74px 88px;font-size:11.5px}.pm{grid-template-columns:1fr 1fr}.pp,.pf{grid-template-columns:1fr}}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);opacity:0;pointer-events:none;background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:99px;font-weight:600;font-size:14px;transition:.25s}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+.lg.im{background:#fff;padding:3px;border:1px solid var(--ln)}.lg img{width:100%;height:100%;display:block;object-fit:contain}
+.logobox{display:flex;align-items:center;gap:12px;margin-top:10px}.logobox .ph{width:64px;height:64px;border:2px dashed var(--ln);border-radius:14px;display:grid;place-items:center;color:var(--mute);font-size:12px;text-align:center;overflow:hidden;flex:none}.logobox img{width:100%;height:100%;display:block}
+.paper{position:relative}.cx{position:relative;z-index:1}
+.wmt{position:absolute;opacity:.04;pointer-events:none;z-index:0}.wmt img{width:100%;height:100%;display:block}
+.pb{margin:12px 28px 0;border-radius:16px}.pc{background:rgba(243,246,252,.7)}
+.pr span,.pc *,.mi b,.pf p{min-width:0;overflow-wrap:anywhere}
+.rw,.ps,.wd,.pay,.pc,.sg{break-inside:avoid;page-break-inside:avoid}
+.tb{border:2px solid #0f172a}
+.tb .rw{display:grid;grid-template-columns:44px minmax(0,1fr) 52px 112px 124px;border-top:2px solid #0f172a}
+.tb .rw:first-child{border-top:0;background:#0f172a;color:#fff;font-weight:600}
+.tb .rw>div{padding:8px 10px;border-left:2px solid #0f172a;min-width:0;overflow-wrap:anywhere}
+.tb .rw>div:first-child{border-left:0;text-align:center}.tb .rw:first-child>div{border-left-color:#fff}
+.wd{margin:14px 36px 0;font-weight:700;font-style:italic;overflow-wrap:anywhere}
+.pay{margin:16px 36px 0;border:2px solid #0f172a}
+.pay .rw{display:grid;grid-template-columns:minmax(120px,.8fr) 2fr;border-top:2px solid #0f172a}
+.pay .rw:first-child{border-top:0;background:#0f172a;color:#fff;font-weight:600;grid-template-columns:1fr}
+.pay .rw>div{padding:8px 10px;min-width:0;overflow-wrap:anywhere}.pay .rw>div+div{border-left:2px solid #0f172a}.pay .rw>div:first-child{font-weight:600}
+@container (max-width:560px){.pb{margin:12px 14px 0}.wd,.pay{margin-left:18px;margin-right:18px}.tb .rw{grid-template-columns:34px minmax(0,1fr) 40px 74px 88px;font-size:11.5px}.tb .rw>div{padding:6px}.pay .rw{grid-template-columns:1fr 1.4fr}}
+@media print{@page{size:A4;margin:0}.bg,.top,#proposal,.pane-form,#toast{display:none!important}body{background:#fff}.wrap{padding:0;max-width:none}.docs{display:block}.paper{box-shadow:none;border-radius:0;max-width:none;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
 </head>
 <body>
+<div class="bg" aria-hidden="true"></div>
+<div class="wrap">
+<header class="top">
+<div class="brand"><span class="lg" id="brandLg">W</span><div><b id="brandName">Wil-Obi Merchandise Nig Ltd</b><small>Invoice app packages</small></div></div>
+<nav class="tabs" aria-label="Views"><button type="button" data-v="proposal">Proposal</button><button type="button" data-v="documents">Documents</button></nav>
+</header>
+<main>
+<section id="proposal">
+<div class="bar">
+<span class="hint">Click any package name, price, “best for” text or feature to edit it. Changes save in this browser.</span>
+<button class="btn go" type="button" id="dlProp">Download proposal PDF</button>
+<button class="btn" type="button" id="reset">Reset to defaults</button>
+</div>
+<div id="sheet"></div>
+</section>
+<section id="documents" hidden>
+<div class="docs">
+<form id="form" class="pane-form"></form>
+<div class="pane-prev"><div id="paper" class="paper"></div></div>
+</div>
+</section>
+</main>
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
+<script>
+const $=(s,r=document)=>r.querySelector(s);
+const el=(t,a={},...c)=>{const e=document.createElement(t);for(const[k,v]of Object.entries(a)){if(k.startsWith('on'))e.addEventListener(k.slice(2),v);else if(v===true)e.setAttribute(k,'');else if(v!==false&&v!=null)e.setAttribute(k,v)}e.append(...c.flat(9).filter(x=>x!=null&&x!==false));return e};
+const DEF={
+packages:[
+{id:'basic',name:'Basic',price:80000,best:'Tailors, small shops, vendors',features:['Company logo and branding','Customer details: name, phone, address','Add items with quantity, rate and auto total','₦ Naira symbol with optional 7.5% VAT','Generate PDF and print invoice','Works on mobile and computer','1 day delivery']},
+{id:'pro',name:'Pro',price:200000,best:'Superstores, pharmacies, schools, hotels',features:['Save and load old invoices','Customer database','Product and item database','Invoice, receipt and quotation documents','Company phone, email and address on documents','Signature and stamp section','Share PDF to WhatsApp','Works offline','5 days delivery and 3 months support']},
+{id:'premium',name:'Premium',price:500000,best:'Chains and big companies',features:['Android APK app','Sales reports and daily summary','Inventory and stock tracking','Barcode scanner','Multi-user staff login','Cloud backup','2 weeks delivery and 6 months support']}],
+addons:[{label:'Google Play Store upload',price:50000,suffix:''},{label:'Yearly maintenance support',price:30000,suffix:' / yr'}],
+note:'One-time payment for the app build. Cloud backup, hosting and optional yearly maintenance are quoted separately. You own the finished app after final payment.',
+seller:{name:'Wil-Obi Merchandise Nig Ltd',phone:'07036536587',email:'',address:'',bankName:'',accName:'',accNo:'',logo:''}};
+const KEY='wilobi-v1',clone=o=>JSON.parse(JSON.stringify(o));
+function load(){try{const o=JSON.parse(localStorage.getItem(KEY)||'null');if(o&&Array.isArray(o.packages)&&Array.isArray(o.addons)){const sl={...DEF.seller,...o.seller};if(sl.name==='Wil-Obi Tech Solutions')sl.name=DEF.seller.name;return{...clone(DEF),...o,seller:sl}}}catch(e){}return clone(DEF)}
+let S=load(),D=null;
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const fmt=k=>'₦'+(k/100).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const num=n=>Number(n).toLocaleString('en-NG');
+const pad=n=>String(n).padStart(2,'0');
+const iso=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const fd=s=>s?new Date(s+'T00:00:00').toLocaleDateString('en-NG',{day:'numeric',month:'short',year:'numeric'}):'–';
+const TITLES={invoice:'Invoice',receipt:'Receipt',quotation:'Quotation'},PRE={invoice:'INV',receipt:'RCT',quotation:'QUO'};
+const mkNo=t=>{const d=new Date();return `${PRE[t]}-${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}`};
+let tt;const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),3200)};
+const wa=()=>{let d=S.seller.phone.replace(/\D/g,'');if(d.startsWith('0'))d='234'+d.slice(1);return 'https://wa.me/'+d};
 
-    <!-- Download Trigger Action Bar -->
-    <div class="action-bar">
-        <button class="btn-download" onclick="generatePDF()">
-            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 4px;">
-                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
-                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
-            </svg>
-            Download Proposal PDF
-        </button>
-    </div>
+/* amount in words, tables, logo */
+const W1=['','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen'],W10=['','','twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety'],SC=['','thousand','million','billion','trillion'];
+const w99=n=>n<20?W1[n]:W10[Math.floor(n/10)]+(n%10?'-'+W1[n%10]:'');
+const w999=n=>n>=100?W1[Math.floor(n/100)]+' hundred'+(n%100?' and '+w99(n%100):''):w99(n);
+function words(k){let n=Math.floor(k/100);const ko=k%100,g=[];if(n===0&&ko===0)return 'Zero naira only';
+while(n>0){g.push(n%1000);n=Math.floor(n/1000)}
+const parts=[];for(let i=g.length-1;i>=0;i--){if(!g[i])continue;parts.push((i===0&&g.length>1&&g[0]<100?'and ':'')+w999(g[i])+(SC[i]?' '+SC[i]:''))}
+let s=parts.join(' ');if(parts.length)s+=' naira';if(ko)s+=(parts.length?' and ':'')+w99(ko)+' kobo';
+return s.charAt(0).toUpperCase()+s.slice(1)+' only'}
+const cell=(t,c='')=>el('div',{class:c,role:'cell'},t);
+function invTable(rows){
+const hd=el('div',{class:'rw',role:'row'},['SN','Service description','Qty','Rate','Total'].map((t,i)=>el('div',{class:i>1?'n':'',role:'columnheader'},t)));
+return el('div',{class:'pi'},el('div',{class:'tb',role:'table','aria-label':'Invoice items'},hd,rows.map((i,n)=>el('div',{class:'rw',role:'row'},cell(String(n+1)),cell(i.desc),cell(String(i.qty),'n'),cell(fmt(Math.round(i.rate*100)),'n'),cell(fmt(lineAmt(i)),'n')))))}
+function payTable(s){const r=(a,b)=>el('div',{class:'rw',role:'row'},el('div',{role:'rowheader'},a),el('div',{role:'cell'},b||'–'));
+return el('div',{class:'pay',role:'table','aria-label':'Payment information'},el('div',{class:'rw',role:'row'},el('div',{role:'columnheader'},'Payment information')),r('Bank name',s.bankName),r('Account name',s.accName),r('Account number',s.accNo),r('Payment reference',D.no))}
+function placeWm(){const p=$('#paper');p.querySelectorAll('.wmt').forEach(x=>x.remove());
+const w=p.clientWidth,h=p.offsetHeight;if(!S.seller.logo||!w||!h)return;
+const tile=w*271/210,sz=w/2,n=Math.ceil(h/tile)+1;
+for(let i=0;i<n;i++)p.prepend(el('div',{class:'wmt',style:`left:25%;width:50%;height:${sz}px;top:${i*tile+(tile-sz)/2}px`},el('img',{src:S.seller.logo,alt:''})))}
+function renderBrand(){const s=S.seller,l=$('#brandLg');$('#brandName').textContent=s.name;l.className=s.logo?'lg im':'lg';l.replaceChildren(s.logo?el('img',{src:s.logo,alt:''}):(s.name||'W')[0].toUpperCase())}
+function pickLogo(f){if(!f)return;const r=new FileReader();
+r.onload=()=>{const im=new Image();
+im.onload=()=>{const w=im.naturalWidth||300,h=im.naturalHeight||300,m=Math.max(w,h),side=Math.min(512,m),k=side/m,c=document.createElement('canvas');c.width=c.height=side;
+c.getContext('2d').drawImage(im,(side-w*k)/2,(side-h*k)/2,w*k,h*k);
+S.seller.logo=c.toDataURL('image/png');save();renderBrand();buildForm();renderPaper();toast('Logo added')};
+im.onerror=()=>toast('Could not read that image. Try a PNG or JPG.');im.src=r.result};
+r.readAsDataURL(f)}
 
-    <!-- The actual Proposal Document -->
-    <div class="document-container" id="proposal-document">
-        
-        <!-- Document Header -->
-        <div class="header">
-            <p class="brand-sub">WIL-OBI TECH SOLUTIONS</p>
-            <h1 class="brand-title">Professional Invoice & Receipt App</h1>
-            <p class="tagline">Stop using handwritten invoices. Get a branded, professional app for your business.</p>
-        </div>
+/* editable text */
+const ed=(txt,cls,fn,label)=>{const e=el('span',{class:cls,contenteditable:'true',role:'textbox','aria-label':label,spellcheck:'false'},txt);
+e.addEventListener('input',()=>fn(e.textContent.trim()));
+e.addEventListener('keydown',x=>{if(x.key==='Enter'){x.preventDefault();e.blur()}});
+e.addEventListener('paste',x=>{x.preventDefault();const t=(x.clipboardData||window.clipboardData).getData('text').replace(/\s+/g,' ');document.execCommand('insertText',false,t)});return e};
+const priceEd=(o,label)=>{const e=ed(num(o.price),'',()=>{},label);e.inputMode='numeric';
+e.addEventListener('input',()=>{o.price=parseInt(e.textContent.replace(/\D/g,''),10)||0;save()});
+e.addEventListener('blur',()=>{e.textContent=num(o.price)});return e};
 
-        <div class="packages-container">
-            
-            <!-- PACKAGE 1: BASIC -->
-            <div class="package-card">
-                <div class="package-header">
-                    <div>
-                        <h3 class="package-name">Package 1: Basic</h3>
-                        <div class="package-best-for">Best for: Tailors, Small Shops, Vendors</div>
-                    </div>
-                    <span class="package-price">₦80,000</span>
-                </div>
-                <ul class="features-list">
-                    <li>Company Logo + Branding</li>
-                    <li>Customer Details: Name, Phone, Address</li>
-                    <li>Add Items with Qty + Rate + Auto Total</li>
-                    <li>₦ Naira Symbol + 7.5% VAT Option</li>
-                    <li>Generate PDF + Print Invoice</li>
-                    <li>Mobile + Computer Friendly</li>
-                    <li>1 Day Delivery</li>
-                </ul>
-            </div>
+/* proposal */
+function pkgCard(p,i){
+return el('article',{class:'pkg'+(p.id==='pro'?' pop':'')},
+p.id==='pro'?el('span',{class:'badge'},'Most popular'):null,
+el('h3',{},ed(p.name,'',v=>{p.name=v;save()},'Package name')),
+el('div',{class:'pr0 big'},'₦',priceEd(p,'Package price')),
+el('p',{class:'best'},'Best for: ',ed(p.best,'',v=>{p.best=v;save()},'Best for')),
+i?el('p',{class:'inh'},`Everything in ${S.packages[i-1].name}, plus:`):null,
+el('ul',{class:'ft'},p.features.map((f,j)=>el('li',{},ed(f,'',v=>{p.features[j]=v;save()},'Feature')))),
+el('button',{class:'btn go no-pdf',type:'button',onclick:()=>{startDoc(p.id);go('documents')}},'Create a document'));}
+function renderProposal(){
+$('#sheet').replaceChildren(
+el('section',{class:'hero'},el('p',{class:'who'},S.seller.name),el('h1',{},'Professional invoice and receipt apps'),el('p',{class:'tag'},'Stop using handwritten invoices. Get a branded, professional app for your business.')),
+el('div',{class:'grid'},S.packages.map(pkgCard)),
+el('h2',{class:'sub'},'Add-ons'),
+el('div',{class:'add'},S.addons.map(a=>el('div',{class:'ao'},ed(a.label,'',v=>{a.label=v;save()},'Add-on name'),el('span',{class:'pr0'},'₦',priceEd(a,'Add-on price'),a.suffix||'')))),
+el('p',{class:'note'},ed(S.note,'',v=>{S.note=v;save()},'Pricing note')),
+el('a',{class:'btn go',href:wa(),target:'_blank',rel:'noopener'},'WhatsApp '+S.seller.phone));}
 
-            <!-- PACKAGE 2: PRO (MOST POPULAR) -->
-            <div class="package-card popular">
-                <div class="popular-badge">Most Popular</div>
-                <div class="package-header">
-                    <div>
-                        <h3 class="package-name">Package 2: Pro</h3>
-                        <div class="package-best-for">Best for: Superstores, Pharmacies, Schools, Hotels</div>
-                    </div>
-                    <span class="package-price">₦200,000</span>
-                </div>
-                <p style="font-weight: 600; font-size: 13px; color: var(--accent); margin: -5px 0 12px 0;">Everything in Basic PLUS:</p>
-                <ul class="features-list">
-                    <li>Save & Load Old Invoices</li>
-                    <li>Customer Database</li>
-                    <li>Product/Item Database</li>
-                    <li>Multiple Document Types (Invoice, Receipt, Quotation)</li>
-                    <li>Company Phone, Email, Address on Invoice</li>
-                    <li>Signature + Stamp Section</li>
-                    <li>Share PDF Directly to WhatsApp</li>
-                    <li>Works Offline</li>
-                    <li>5 Days Delivery + 3 Months Support</li>
-                </ul>
-            </div>
+/* documents */
+const root=k=>k.startsWith('seller.')?S:D;
+const get=k=>k.split('.').reduce((o,p)=>o?.[p],root(k));
+const set=(k,v)=>{const a=k.split('.'),l=a.pop();a.reduce((o,p)=>o[p],root(k))[l]=v};
+const lineAmt=i=>Math.round(i.qty*Math.round(i.rate*100));
+function totals(){
+const sub=D.items.reduce((s,i)=>s+lineAmt(i),0),disc=D.discType==='pct'?Math.round(sub*Math.min(D.discount,100)/100):Math.min(Math.round(D.discount*100),sub),base=sub-disc;
+const vat=D.vat?Math.round(base*75/1000):0,total=base+vat;
+const paid=D.type==='quotation'?0:Math.min(Math.round(D.paid*100),total);
+return{sub,disc,vat,total,paid,bal:total-paid}}
+function startDoc(id,type='invoice'){
+const p=S.packages.find(x=>x.id===id)||S.packages[0],t=new Date(),due=new Date(t.getTime()+14*864e5);
+D={type,pkg:p.id,no:mkNo(type),date:iso(t),due:iso(due),client:{name:'',phone:'',address:''},vat:true,discount:0,discType:'amt',paid:0,notes:'',items:[{desc:p.name+' package – invoice app',qty:1,rate:p.price}]};
+buildForm();renderPaper()}
+function loadPackage(id){const p=S.packages.find(x=>x.id===id);if(!p)return;D.pkg=id;D.items=[{desc:p.name+' package – invoice app',qty:1,rate:p.price}];if(D.type==='receipt')D.paid=totals().total/100;buildForm();renderPaper()}
+function setType(t){D.type=t;D.no=mkNo(t);if(t==='receipt'&&!D.paid)D.paid=totals().total/100;buildForm();renderPaper()}
+function fillItems(){
+$('#items').replaceChildren(D.items.map((it,i)=>el('div',{class:'ir'},
+el('input',{class:'d','data-k':`items.${i}.desc`,value:it.desc,placeholder:'Description','aria-label':'Description'}),
+el('input',{'data-k':`items.${i}.qty`,'data-n':1,type:'number',min:0,step:'any',value:it.qty,'aria-label':'Quantity'}),
+el('input',{'data-k':`items.${i}.rate`,'data-n':1,type:'number',min:0,step:'any',value:it.rate,'aria-label':'Rate in naira'}),
+el('button',{class:'x',type:'button','aria-label':'Remove line',onclick:()=>{D.items.splice(i,1);fillItems();renderPaper()}},'✕'))))}
+function buildForm(){
+const ty=D.type,numA={type:'number',min:0,step:'any','data-n':1};
+const fld=(l,k,a={})=>el('label',{},l,el('input',{'data-k':k,value:get(k),...a}));
+const sel=el('select',{},S.packages.map(p=>el('option',{value:p.id,selected:p.id===D.pkg},`${p.name} – ${fmt(p.price*100)}`)));
+sel.addEventListener('change',()=>loadPackage(sel.value));
+$('#form').replaceChildren(
+el('h2',{},'Create a document'),
+el('div',{class:'seg',role:'group','aria-label':'Document type'},Object.keys(TITLES).map(t=>el('button',{type:'button','aria-pressed':String(t===ty),onclick:()=>setType(t)},TITLES[t]))),
+el('label',{},'Package',sel),
+fld('Document number','no'),
+fld('Client name','client.name',{placeholder:'e.g. Ada Stores'}),
+fld('Client phone','client.phone',{type:'tel'}),
+fld('Client address','client.address'),
+fld(ty==='receipt'?'Payment date':'Date issued','date',{type:'date'}),
+ty==='receipt'?null:fld(ty==='quotation'?'Valid until':'Due date','due',{type:'date'}),
+el('h3',{},'Line items'),el('div',{id:'items'}),
+el('div',{class:'chips'},el('button',{type:'button',onclick:()=>{D.items.push({desc:'',qty:1,rate:0});fillItems();renderPaper()}},'+ Add line'),
+S.addons.map(a=>el('button',{type:'button',onclick:()=>{D.items.push({desc:a.label,qty:1,rate:a.price});fillItems();renderPaper()}},'+ '+a.label))),
+el('label',{class:'ck'},el('input',{type:'checkbox','data-k':'vat',checked:D.vat}),'Add 7.5% VAT'),
+el('label',{},'Discount type',el('select',{'data-k':'discType'},[['amt','Amount (₦)'],['pct','Percent (%)']].map(([v,t])=>el('option',{value:v,selected:D.discType===v},t)))),fld(D.discType==='pct'?'Discount (%)':'Discount (₦)','discount',numA),
+ty==='quotation'?null:fld(ty==='receipt'?'Amount received (₦)':'Amount paid so far (₦)','paid',numA),
+el('label',{},'Notes',el('textarea',{rows:3,'data-k':'notes'},D.notes)),
+el('details',{open:true},el('summary',{},'Your business details'),
+el('div',{class:'logobox'},el('div',{class:'ph'},S.seller.logo?el('img',{src:S.seller.logo,alt:'Your logo'}):'Your logo'),el('div',{},el('label',{class:'btn',style:'display:inline-block;margin:0;cursor:pointer;color:var(--ink)'},'Upload logo',el('input',{type:'file',accept:'image/*',hidden:true,onchange:e=>pickLogo(e.target.files[0])})),S.seller.logo?el('button',{class:'btn',type:'button',style:'margin-left:6px',onclick:()=>{S.seller.logo='';save();renderBrand();buildForm();renderPaper()}},'Remove'):null)),
+fld('Business name','seller.name'),fld('Address','seller.address'),fld('Contact (phone)','seller.phone',{type:'tel'}),fld('Email','seller.email',{type:'email'}),
+el('h3',{},'Payment information (invoices)'),fld('Bank name','seller.bankName'),fld('Account name','seller.accName'),fld('Account number','seller.accNo',{inputmode:'numeric'})),
+el('div',{class:'acts'},el('button',{class:'btn go',type:'button',onclick:()=>exportPDF($('#paper'),D.no+'.pdf','#ffffff',[12,0,14,0])},'Download PDF'),el('button',{class:'btn',type:'button',onclick:()=>window.print()},'Print')));
+fillItems()}
+function renderPaper(){
+const T=totals(),s=S.seller,ty=D.type,rows=D.items.filter(i=>i.desc.trim()||i.rate);
+const stat=ty==='quotation'?'Valid until '+fd(D.due):ty==='receipt'?(T.bal===0?'Paid in full':'Part payment'):(T.bal===0&&T.total>0?'Paid':T.paid>0?'Part paid':'Awaiting payment');
+const mi=(l,v)=>el('div',{class:'mi'},el('small',{},l),el('b',{},v));
+const sr=(l,v,c='')=>el('div',{class:'sr '+c},el('span',{},l),el('b',{},v));
+const c=D.client;
+const cx=el('div',{class:'cx'},
+el('div',{class:'pb'},el('div',{class:'bd'},el('span',{class:s.logo?'lg im':'lg'},s.logo?el('img',{src:s.logo,alt:''}):(s.name||'W')[0].toUpperCase()),s.name),el('div',{class:'bt'},el('div',{class:'pt'},TITLES[ty]),el('span',{class:'chip'},stat))),
+el('div',{class:'pm'},mi('Number',D.no),mi(ty==='receipt'?'Payment date':'Date issued',fd(D.date)),ty==='receipt'?null:mi(ty==='quotation'?'Valid until':'Due date',fd(D.due))),
+el('div',{class:'pp'},
+el('div',{class:'pc'},el('small',{},'From'),[s.name,s.phone,s.email,s.address].filter(Boolean).map((l,i)=>el(i?'span':'b',{},l))),
+el('div',{class:'pc'},el('small',{},ty==='quotation'?'Prepared for':ty==='receipt'?'Received from':'Billed to'),[c.name||'Client name',c.phone,c.address].filter(Boolean).map((l,i)=>el(i?'span':'b',{},l)))),
+ty==='invoice'?invTable(rows):el('div',{class:'pi'},el('div',{class:'pr h'},el('span',{},'Description'),el('span',{class:'n'},'Qty'),el('span',{class:'n'},'Rate'),el('span',{class:'n'},'Amount')),
+rows.map(i=>el('div',{class:'pr'},el('span',{},i.desc),el('span',{class:'n'},String(i.qty)),el('span',{class:'n'},fmt(Math.round(i.rate*100))),el('span',{class:'n'},fmt(lineAmt(i)))))),
+el('div',{class:'ps'},sr('Subtotal',fmt(T.sub)),T.disc?sr('Discount'+(D.discType==='pct'?' ('+D.discount+'%)':''),'−'+fmt(T.disc)):null,D.vat?sr('VAT (7.5%)',fmt(T.vat)):null,sr('Total',fmt(T.total),'tot'),
+ty!=='quotation'&&T.paid?sr(ty==='receipt'?'Amount received':'Amount paid',fmt(T.paid)):null,
+ty!=='quotation'&&T.paid&&T.bal>0?sr('Balance due',fmt(T.bal),'bal'):null),
+el('div',{class:'wd'},'Amount in words: '+words(ty==='receipt'&&T.paid?T.paid:T.total)),ty==='invoice'?payTable(s):null,el('div',{class:'pf'},
+el('div',{},D.notes?[el('small',{},'Notes'),el('p',{},D.notes)]:null,ty==='invoice'&&s.bank?[el('small',{},'Payment details'),el('p',{},s.bank)]:null),
+el('div',{class:'sg'},(ty==='quotation'?['Client acceptance','Authorised signature']:[ty==='receipt'?'Received by':'Authorised signature']).map(t=>el('span',{},t)))),
+el('div',{class:'pe'},'Thank you for choosing '+s.name));$('#paper').replaceChildren(cx);placeWm()}
 
-            <!-- PACKAGE 3: PREMIUM -->
-            <div class="package-card">
-                <div class="package-header">
-                    <div>
-                        <h3 class="package-name">Package 3: Premium</h3>
-                        <div class="package-best-for">Best for: Chains, Big Companies</div>
-                    </div>
-                    <span class="package-price">₦500,000</span>
-                </div>
-                <p style="font-weight: 600; font-size: 13px; color: var(--accent); margin: -5px 0 12px 0;">Everything in Pro PLUS:</p>
-                <ul class="features-list">
-                    <li>Convert to Android APK App</li>
-                    <li>Sales Reports & Daily Summary</li>
-                    <li>Inventory & Stock Tracking</li>
-                    <li>Barcode Scanner</li>
-                    <li>Multi-User Login for Staff</li>
-                    <li>Cloud Backup</li>
-                    <li>2 Weeks Delivery + 6 Months Support</li>
-                </ul>
-            </div>
+/* PDF */
+async function exportPDF(n,name,bg,mg=[0,0,0,0]){
+if(typeof html2pdf==='undefined'){toast('PDF tool did not load. Check your connection or use Print.');return}
+n.classList.add('pdf');if(n.id==='paper')placeWm();
+try{await html2pdf().set({margin:mg,filename:name,image:{type:'jpeg',quality:.98},html2canvas:{scale:2,useCORS:true,backgroundColor:bg,windowWidth:900},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},pagebreak:{mode:['css','legacy'],avoid:['.pkg','.ps','.pr','.ao','.rw','.wd','.pay','.pc']}}).from(n).save();toast('PDF downloaded')}
+catch(e){toast('PDF failed. Use Print and choose Save as PDF.')}
+finally{n.classList.remove('pdf');if(n.id==='paper')placeWm()}}
 
-        </div>
-
-        <!-- Add-ons section -->
-        <div class="extras-section">
-            <h3 class="extras-title">Available Add-ons</h3>
-            <div class="extras-grid">
-                <div class="extra-item">
-                    <span class="extra-label">Google Play Store Upload</span>
-                    <span class="extra-price">+₦50,000</span>
-                </div>
-                <div class="extra-item">
-                    <span class="extra-label">Yearly Maintenance Support</span>
-                    <span class="extra-price">₦30,000 / yr</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Guarantee Note -->
-        <div class="footer-note">
-            💡 <strong>One-time payment.</strong> You own the app lifetime and forever. Absolutely no monthly or subscription fees.
-        </div>
-
-        <!-- Contact details -->
-        <div class="contact-footer">
-            <p style="margin-bottom: 15px; font-weight: 600; font-size: 15px;">Ready to elevate your business operations?</p>
-            <a href="https://wa.me/2347036536587" class="contact-btn" target="_blank">
-                💬 Call / WhatsApp: 07036536587
-            </a>
-        </div>
-
-    </div>
-
-    <!-- PDF Generation Logic -->
-    <script>
-        function generatePDF() {
-            const element = document.getElementById('proposal-document');
-            const opt = {
-                margin:       0.3,
-                filename:     'WilObi_Tech_Solutions_Invoice_Proposal.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true },
-                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-            };
-
-            // Run html2pdf
-            html2pdf().set(opt).from(element).save();
-        }
-    </script>
+/* views and wiring */
+function show(n){
+const v=n==='documents'?'documents':'proposal';
+$('#proposal').hidden=v!=='proposal';$('#documents').hidden=v!=='documents';
+document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v===v)));
+renderBrand();if(v==='proposal')renderProposal();else if(!D)startDoc(S.packages[0].id);else{buildForm();renderPaper()}
+window.scrollTo(0,0)}
+function go(n){if(location.hash==='#'+n)show(n);else location.hash=n}
+addEventListener('hashchange',()=>show(location.hash.slice(1)));
+document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>go(b.dataset.v)));
+const onField=e=>{const t=e.target,k=t.dataset.k;if(!k)return;let v=t.type==='checkbox'?t.checked:t.value;if(t.dataset.n)v=Math.max(0,parseFloat(v)||0);set(k,v);if(k.startsWith('seller.')){save();renderBrand()}if(k==='discType')buildForm();renderPaper()};
+$('#form').addEventListener('input',onField);$('#form').addEventListener('change',onField);
+$('#form').addEventListener('submit',e=>e.preventDefault());
+$('#dlProp').addEventListener('click',()=>exportPDF($('#sheet'),'WilObi_Invoice_App_Proposal.pdf',getComputedStyle(document.body).backgroundColor));
+addEventListener('resize',()=>{if(!$('#documents').hidden&&D)placeWm()});let rt;$('#reset').addEventListener('click',e=>{const b=e.currentTarget;if(b.dataset.arm){S=clone(DEF);save();D=null;renderProposal();b.textContent='Reset to defaults';delete b.dataset.arm;toast('Defaults restored');return}
+b.dataset.arm=1;b.textContent='Click again to confirm';clearTimeout(rt);rt=setTimeout(()=>{b.textContent='Reset to defaults';delete b.dataset.arm},3500)});
+show(location.hash.slice(1));
+</script>
 </body>
 </html>
