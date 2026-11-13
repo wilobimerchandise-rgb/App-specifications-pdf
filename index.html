@@ -307,10 +307,10 @@ el('div',{class:'pe'},'Thank you for choosing '+s.name));$('#paper').replaceChil
 /* PDF */
 async function exportPDF(n,name,bg,mg=[0,0,0,0]){
 if(typeof html2pdf==='undefined'){toast('PDF tool did not load. Check your connection or use Print.');return}
-n.classList.add('pdf');if(n.id==='paper')placeWm();
-try{await html2pdf().set({margin:mg,filename:name,image:{type:'jpeg',quality:.98},html2canvas:{scale:2,useCORS:true,backgroundColor:bg,windowWidth:900},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},pagebreak:{mode:['css','legacy'],avoid:['.pkg','.ps','.pr','.ao','.rw','.wd','.pay','.pc']}}).from(n).save();toast('PDF downloaded')}
+const sy=window.scrollY;window.scrollTo(0,0);n.classList.add('pdf');if(n.id==='paper')placeWm();await new Promise(r=>requestAnimationFrame(()=>r()));
+try{await html2pdf().set({margin:mg,filename:name,image:{type:'jpeg',quality:.98},html2canvas:{scale:2,useCORS:true,backgroundColor:bg,windowWidth:900,scrollX:0,scrollY:0},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},pagebreak:{mode:['css','legacy'],avoid:['.pkg','.ps','.pr','.ao','.rw','.wd','.pay','.pc']}}).from(n).save();toast('PDF downloaded')}
 catch(e){toast('PDF failed. Use Print and choose Save as PDF.')}
-finally{n.classList.remove('pdf');if(n.id==='paper')placeWm()}}
+finally{n.classList.remove('pdf');if(n.id==='paper')placeWm();window.scrollTo(0,sy)}}
 
 /* views and wiring */
 function show(n){
